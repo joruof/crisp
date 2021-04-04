@@ -34,3 +34,21 @@ statements about other compilers.
 No external dependencies are used. 
 
 A tolerance for C++ templates and absurd error messages is also required.
+
+## Structure
+
+Right now the library is structured into three header files. These are, ordered
+by increasing complexity:
+
+* `crisp.h`: contains the core of the library and is needed to define
+  properties on datatypes.
+* `crisp_func.h`: contains function definitions to allow visitor structs to
+  iterate the properties of a crisp type.
+* `crisp_visitors.h`: contains some often needed visitors along with a set of
+  macros for easier visitor definition.
+
+In larger projects compile time often becomes an issue. By separating the
+functionality into multiple headers you can include only what you actually
+need. All PODs, for examples, would need to include only `crisp.h`, while
+compile units for algorithms operating on said PODs may include `crisp_func.h`
+or even `crisp_visitor.h`.

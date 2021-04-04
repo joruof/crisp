@@ -1,21 +1,20 @@
 #ifndef COMPILE_AND_RUNTIME_INTROSPECTABLE_PROPERTIES_VISITORS
 #define COMPILE_AND_RUNTIME_INTROSPECTABLE_PROPERTIES_VISITORS
 
-#include <sstream>
 #include <vector>
+#include <sstream>
 
-#include "helpers/Table.h"
-#include "helpers/Crisp.h"
+#include "crisp_func.h"
 
 /*
  * Helper macros for easier visitor definition.
  */
 
-#define is_props_object(T) typename std::enable_if< \
-            is_crisp<T>::value>::type* = nullptr
+#define is_crisp_object(T) typename std::enable_if< \
+            ::crisp::is_crisp<T>::value>::type* = nullptr
 
 #define is_common_object(T) typename std::enable_if<! \
-            is_crisp<T>::value>::type* = nullptr
+            ::crisp::is_crisp<T>::value>::type* = nullptr
 
 /**
  * This checks whether an object can be printed.
@@ -95,7 +94,7 @@ class PropertyStringWriter {
 
 public:
 
-    template<typename C, is_props_object(C)>
+    template<typename C, is_crisp_object(C)>
     PropertyStringWriter (C& c, std::string name = "", int il = 0) 
         : indentLevel{il} {
 
@@ -184,7 +183,7 @@ public:
  * object has changed.
  */
 
-template<typename C, is_props_object(C)>
+template<typename C, is_crisp_object(C)>
 class PropertyCompare {
 
     C* before = nullptr;
@@ -228,7 +227,7 @@ public:
         return hasChanged;
     }
 
-    template <typename O, typename T, is_props_object(T)>
+    template <typename O, typename T, is_crisp_object(T)>
     void apply (const std::string&, T& value, T O::* ref) {
 
         hasChanged |= PropertyCompare<T>(before->*ref).changed(value);
@@ -260,7 +259,7 @@ class PropertyJsonWriter {
 
 public:
 
-    template <typename T, typename C, is_props_object(T)>
+    template <typename T, typename C, is_crisp_object(T)>
     void apply (const std::string& name, T& value, T C::*) {
         json << std::string(indentLevel * 2, ' ')
             << name

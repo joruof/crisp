@@ -1,10 +1,10 @@
 #include <iostream>
 
-#include "crisp.h"
+#include "crisp_func.h"
 
 struct Test {
 
-    START_PROPS(Test)
+    CRISP_START(Test)
 
     P(int, a, 0);
     P(double, b, 0);
@@ -15,7 +15,7 @@ struct Test {
 
     F(test);
 
-    END_PROPS
+    CRISP_END
 };
 
 struct Blub { };
@@ -23,6 +23,5 @@ struct Blub { };
 int main () {
     
     std::cout << crisp::has<Test>("a") << std::endl;
-
     std::cout << crisp::is_crisp<Test>() << std::endl;
 }
